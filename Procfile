@@ -1,1 +1,1 @@
-web:node index
+web:npx nodemon index
