@@ -42,7 +42,7 @@
 
       socket.on('chat message', function(mess) {
         var item = document.createElement('li');
-        item.textContent = `${mess.username}: ${mess.msg}`;
+        item.textContent = `${mess.user}: ${mess.msg}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
