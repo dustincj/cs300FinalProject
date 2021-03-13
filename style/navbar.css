@@ -10,10 +10,12 @@ body {
 }
 .navbar .nav-item {
   padding: 10px 20px;
+  margin:auto;
 }
 .navbar .nav-link {
   font-size: 20px;
   margin-left: 10px;
+  margin:auto;
 }
 .fa-bars {
   color: #007bff;

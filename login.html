@@ -4,13 +4,15 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link type="text/css" href="./style/login.css" media = "screen"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <title>Login</title>
 </head>
 <body   >
     <nav class="navbar sticky-top navbar-expand-lg fixed-top bg-dark">
         <div class="container">
           <a class="navbar-brand" href="#">E-Chat</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button style = "color:#000000" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
        <i class="fas fa-bars"></i>
       </button>
     
@@ -28,13 +30,15 @@
           </div>
         </div>
       </nav>
-    <form  id="Login" style="text-align:center; padding-top:325px" method="POST" action="./login">
+    <div style="padding-top:325px; text-align:center;">
+    <form  id="Login"  method="POST" action="./login">
         <p>Username</p>
         <input type="text" name="username" required id="username" required pattern="\S+" title="No Spaces Allowed" required />
         <p>Password</p>
-        <input type="text" name="password" required id = "password" required pattern="\S+" title="No Spaces Allowed" required />
+        <input type="password" name="password" required id = "password" required pattern="\S+" title="No Spaces Allowed" required />
         <div style="padding-top:15px"><button id="ssubmit" type="submit" class="btn btn-primary" value = "ssubmit" >Login</button></div>
     </form>
+    </div>
     <script>
     var Login = document.getElementById('submit');
     var username = document.getElementById('username');
