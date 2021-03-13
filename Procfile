@@ -1,1 +1,1 @@
-web: npx nodemon index
+web: npx nodemon server

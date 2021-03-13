@@ -1,12 +1,12 @@
 const express = require('express')
 const app = express()
 const path = require('path')
-const port = process.env.PORT || 5695
+const port = process.env.PORT || 5766
 
 require("dotenv").config()
 
 const mongoose = require("mongoose")
-mongoose.connect(process.env.ATLAS_URI, {useUnifiedTopology: true, useNewUrlParser: true})
+mongoose.connect(process.env.DATABASE, {useUnifiedTopology: true, useNewUrlParser: true})
 
 mongoose.connection.on("error", (err) => {
     console.log("ERROR: " + err.message)
@@ -30,16 +30,25 @@ const server = app.listen(port, () => {
 
 const io = require('socket.io')(server)
 require("./models/Message")
+require("./models/User")
 const Message = mongoose.model("Message")
-
+const User = mongoose.model("User")
 io.on('connection', (socket) => {
     console.log('a user connected');
+    socket.on('new user', (user) =>{
+      io.emit('new user', user);
+      const newUser = new User({
+        users: `${user.username}`
 
+      })
+  newUser.save();
+    })
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
-
+        
+        
         const newMessage = new Message({
-            message: `${msg.user.username}: ${msg.msg}`
+            message: `${msg.user}: ${msg.msg}`
         })
     newMessage.save();
       });
