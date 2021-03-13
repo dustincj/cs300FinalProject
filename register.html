@@ -1,12 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link type="text/css" href="./style/login.css" media = "screen"/>
-    <title>Login</title>
+    <title>Register</title>
 </head>
-<body   >
+<body >
     <nav class="navbar sticky-top navbar-expand-lg fixed-top bg-dark">
         <div class="container">
           <a class="navbar-brand" href="#">E-Chat</a>
@@ -28,16 +26,16 @@
           </div>
         </div>
       </nav>
-    <form  style="text-align:center; padding-top:325px" method="POST" action="./login">
+    <form style="text-align:center; padding-top:325px" method="POST" action="./register">
         <p>Username</p>
-        <input type="text" name="username" required id = "username" required pattern="\S+" title="No Spaces Allowed" required />
+        <input type="text" name="username"  id = "username" required pattern="\S+" title="No Spaces Allowed" required />
         <p>Password</p>
-        <input type="text" name="password" required id = "password" required pattern="\S+" title="No Spaces Allowed" required />
-        <div style="padding-top:15px"><button  type="submit" class="btn btn-primary" value = "Submit Button" >Login</button></div>
+        <input type="text" name="password"  id = "password" required pattern="\S+" title="No Spaces Allowed" required />
+        <div style="padding-top:15px"><button  type="submit" class="btn btn-primary" value = "Submit Button" >Register</button></div>
     </form>
-    
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
+

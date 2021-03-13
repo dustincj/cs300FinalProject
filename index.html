@@ -16,18 +16,19 @@
     </style>
   </head>
   <body>
+
+
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" />
+      <button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
-      
-      var webuser = window.location.search;
-      const username = webuser.slice(10)
 
 
+      var userprofile = document.getElementById('userprofile');
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
@@ -35,18 +36,17 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('new user', {user: username});
-          socket.emit('chat message', {msg: input.value, user: username});
+          socket.emit('chat message', {msg: input.value});
           input.value = '';
         }
       });
 
       socket.on('chat message', function(mess) {
         var item = document.createElement('li');
-        item.textContent = `${mess.user}: ${mess.msg}`;
+        item.textContent = `${mess.msg}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
     </script>
   </body>
-</html>
+</html> 
