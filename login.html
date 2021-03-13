@@ -28,23 +28,25 @@
           </div>
         </div>
       </nav>
-    <form  id = "Login" style="text-align:center; padding-top:325px" method="POST" action="./login">
+    <form  id="Login" style="text-align:center; padding-top:325px" method="POST" action="./login">
         <p>Username</p>
-        <input type="text" name="username" required id = "username" required pattern="\S+" title="No Spaces Allowed" required />
+        <input type="text" name="username" required id="username" required pattern="\S+" title="No Spaces Allowed" required />
         <p>Password</p>
         <input type="text" name="password" required id = "password" required pattern="\S+" title="No Spaces Allowed" required />
-        <div style="padding-top:15px"><button  type="submit" class="btn btn-primary" value = "Submit Button" >Login</button></div>
+        <div style="padding-top:15px"><button id="ssubmit" type="submit" class="btn btn-primary" value = "ssubmit" >Login</button></div>
     </form>
-    <script 
-    var Login = document.getElementById('Login');
-    var input = document.getElementById('username');
-
-    Login.addEventListener('submit', function(e) {
+    <script>
+    var Login = document.getElementById('submit');
+    var username = document.getElementById('username');
+    var form = document.getElementById('Login');
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
-        document.cookie = input.value
-        Login.submit();
-    });
-    ></script>
+        console.log(username.value);
+        document.cookie = username.value;
+        console.log(document.cookie);
+        form.submit();
+    })
+    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

@@ -50,6 +50,7 @@ function isLoggedIn(req,res,next) {
   }
   res.redirect("/login")
 };
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/navbar.html');
 })
@@ -74,7 +75,7 @@ app.post("/register",(req,res)=>{
           res.render("register");
       }
   passport.authenticate("local")(req,res,function(){
-      res.redirect("/login");
+      res.redirect("/index");
   })
   })
 })
@@ -96,10 +97,17 @@ const server = app.listen(port, () => {
 require("./models/Message")
 const Message = mongoose.model("Message")
 
+io.use((socket,next) => {
+  const user = socket.handshake.auth.user;
+  socket.user = user;
+  next();
+})
+
 io.on('connection', (socket) => {
     console.log('a user connected')
 
     socket.on('chat message', (msg) => {
+        console.log(msg);
         io.emit('chat message', msg)
 
         const newMessage = new Message({
