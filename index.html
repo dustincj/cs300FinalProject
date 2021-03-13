@@ -25,25 +25,29 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
+      var socket = io({
+        auth: {
+          user: username
+        }
+      });
 
 
       var userprofile = document.getElementById('userprofile');
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
-
+      var username = document.cookie;
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', {msg: input.value});
+          socket.emit('chat message', {msg: input.value, username});
           input.value = '';
         }
       });
 
       socket.on('chat message', function(mess) {
         var item = document.createElement('li');
-        item.textContent = `${mess.msg}`;
+        item.textContent = `${username}:${mess.msg}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
