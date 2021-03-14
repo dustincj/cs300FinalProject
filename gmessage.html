@@ -78,8 +78,11 @@
             function groupChange(cg)
             {
               currentGroup = cg;
-              
               console.log(currentGroup);
+              while(messages.firstChild)
+              {
+                messages.removeChild(messages.firstChild);
+              }
               socket.emit("gchange", currentGroup);
             }
 
