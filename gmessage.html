@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  
+        #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 33%; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+        #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+        #input:focus { outline: none; }
+        #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+  
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages > li { padding: 0.5rem 1rem; }
+        #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+  <nav class="navbar sticky-top navbar-expand-lg fixed-top bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">E-Chat</a>
+      <button style = "color:#000000" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+   <i class="fas fa-bars"></i>
+  </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto w-100 justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Logout <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./index">Chat-All</a>
+            <li class="nav-item active">
+              <a class="nav-link" href="./gmessage">Group-Messaging</a>
+                </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+        <div class="row container-fluid">
+            <div class="col-sm-4">
+                <form id="groups" class="form-check" style="overflow: auto; max-height: 490px;">
+                </form> 
+                  <form id="groupform" style="position: static; margin-top: auto;">
+                    <input id="newgroup" type="text" autocomplete="off">
+                    <div style="padding-top:15px"><button   type="submit" class="btn btn-primary" value = "submit" >Create New Group</button></div>
+                  </form>
+            </div>
+
+            <div class="col-sm-8 border-box">
+              <ul id="messages" style="overflow: auto; "></ul>
+              <form id="form" action="">
+                <input id="input" autocomplete="off" /><button>Send</button>
+              </form>
+
+            </div>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            var currentGroup = "";
+            const username = document.cookie;
+            var socket = io({
+              auth: {
+                user: username
+              }
+            });
+    
+            var grouplist = document.getElementById("groups");
+            var messages = document.getElementById("messages");
+            var form = document.getElementById("form");
+            var input = document.getElementById("input");
+            var newgroup = document.getElementById("newgroup")
+            var groupform = document.getElementById("groupform")
+            
+            function groupChange(cg)
+            {
+              currentGroup = cg;
+              
+              console.log(currentGroup);
+              socket.emit("gchange", currentGroup);
+            }
+
+
+
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              if (input.value) {
+                console.log(username);
+                socket.emit('group chat', {msg: input.value, user: username, group: currentGroup});
+                input.value = '';
+                }
+              });
+
+            groupform.addEventListener('submit', (e) => {
+              e.preventDefault()
+              if(newgroup.value != ""){
+                var item = '<input type="radio" name = "m"  onclick="groupChange(this.id)" checked="checked" id="' + newgroup.value + '">' + newgroup.value + '</input>'
+                grouplist.innerHTML += item
+                grouplist.innerHTML += "<br>"
+                socket.emit("add chatroom", newgroup.value);
+                newgroup.value = ""
+                
+              }
+            });
+
+
+            socket.on("server group", (value)=> {
+                var item = '<input type="radio" name = "m" onclick="groupChange(this.id)" checked="checked" id="' + `${value}` +'">' + `${value}` +'</input>'
+                grouplist.innerHTML += item
+                grouplist.innerHTML += "<br>"
+
+            }
+            )
+
+            socket.on('grab', (data) => {
+            data.map((d) => {
+              var item = '<input type="radio" name = "m" onclick="groupChange(this.id)"  id="' + `${d.name}` +'">' + `${d.name}` +'</input>'
+                grouplist.innerHTML += item
+                grouplist.innerHTML += "<br>"
+          })
+        })
+          socket.on('group message', function(mess) {
+              if(mess.group === currentGroup)
+              {
+              var item = document.createElement('li');
+              item.textContent = `${mess.user}: ${mess.msg}`;
+              messages.appendChild(item);
+              window.scrollTo(0, document.body.scrollHeight);
+              }
+            });
+
+            socket.on('chat message', function(mess) {
+              var item = document.createElement('li');
+              item.textContent = `${mess.user}: ${mess.msg}`;
+              messages.appendChild(item);
+              window.scrollTo(0, document.body.scrollHeight);
+            });
+
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js%22%3E"></script>
+      </body>
+</html>

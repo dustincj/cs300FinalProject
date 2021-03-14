@@ -34,7 +34,7 @@
             <li class="nav-item active">
               <a class="nav-link" href="./index">Chat-All</a>
               <li class="nav-item">
-                <a class="nav-link" href="./dmessage">Direct Message</a>
+                <a class="nav-link" href="./gmessage">Group-Messaging</a>
                   </li>
           </ul>
         </div>
@@ -56,7 +56,14 @@
           user: username
         }
       });
-
+      socket.on('load', (data) => {
+          data.map((d) => {
+            var item = document.createElement('li');
+            item.textContent = d.message;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          })
+        })
 
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
@@ -74,7 +81,7 @@
 
       socket.on('chat message', function(mess) {
         var item = document.createElement('li');
-        item.textContent = `${mess.user}:${mess.msg}`;
+        item.textContent = `${mess.user}: ${mess.msg}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });

@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 5766
+const port = process.env.PORT || 5765
 const session = require("express-session")
 const User = require('./models/User')
 const bodyParser = require('body-parser')
@@ -67,12 +67,17 @@ app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/index.html');
   });
 
+app.get('/gmessage', (req, res) => {
+    res.sendFile(__dirname + '/gmessage.html');
+  })
+  
+
 app.post("/register",(req,res)=>{
 
   User.register(new User({username: req.body.username,}),req.body.password,function(err,user){
       if(err){
           console.log(err);
-          res.render("register");
+          res.render("gmessage");
       }
   passport.authenticate("local")(req,res,function(){
       res.redirect("/login");
@@ -94,9 +99,10 @@ const server = app.listen(port, () => {
 })
 
     const io = require('socket.io')(server)
-require("./models/Message")
-const Message = mongoose.model("Message")
-
+    require("./models/Message")
+    require("./models/Chatroom")
+    const Message = mongoose.model("Message")
+    const Chatroom = mongoose.model("Chatroom")
 io.use((socket,next) => {
   const user = socket.handshake.auth.user;
   socket.user = user;
@@ -106,6 +112,33 @@ io.use((socket,next) => {
 io.on('connection', (socket) => {
     console.log('a user connected')
 
+    Message.find((err, data) => {
+      if(err)
+        console.log(err)
+      else
+        socket.emit('load', data)
+    });
+
+    Chatroom.find((err, data) => {
+      if(err)
+        console.log(err)
+      else
+        socket.emit('grab', data)
+    });
+
+    socket.on('group chat', (msg) => {
+      console.log(`${msg.group}`);
+      io.to(`${msg.group}`).emit("group message", msg)
+
+    });
+
+    
+
+
+    socket.on("gchange", (currentGroup)=> {
+        socket.join(`${currentGroup}`)
+    })
+    
     socket.on('chat message', (msg) => {
         console.log(msg);
         io.emit('chat message', msg)
@@ -115,6 +148,15 @@ io.on('connection', (socket) => {
         })
     newMessage.save()
       })
+
+      socket.on("add chatroom", (value)=> {
+        console.log(value);
+        const newChatroom = new Chatroom({
+          name: `${value}`
+        })
+        newChatroom.save();
+        socket.broadcast.emit("server group", value);
+      });
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
