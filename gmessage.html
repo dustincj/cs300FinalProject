@@ -109,6 +109,14 @@
               }
             });
 
+            socket.on('group messages load', (data) => {
+            data.messages.map((d) => {
+            var item = document.createElement('li');
+            item.textContent = d;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          })
+        })
 
             socket.on("server group", (value)=> {
                 var item = '<input type="radio" name = "m" onclick="groupChange(this.id)" checked="checked" id="' + `${value}` +'">' + `${value}` +'</input>'

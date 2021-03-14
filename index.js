@@ -128,8 +128,16 @@ io.on('connection', (socket) => {
 
     socket.on('group chat', (msg) => {
       console.log(`${msg.group}`);
-      io.to(`${msg.group}`).emit("group message", msg)
-
+      
+      Chatroom.updateOne({name:msg.group},
+        {$addToSet: {messages: [`${msg.user} : ${msg.msg}`]  }}, (err,result) => {
+          if(err)
+            console.log(err)
+          else
+            console.log(result)
+        }
+      )
+        io.to(`${msg.group}`).emit("group message", msg)
     });
 
     
@@ -137,6 +145,13 @@ io.on('connection', (socket) => {
 
     socket.on("gchange", (currentGroup)=> {
         socket.join(`${currentGroup}`)
+        Chatroom.findOne({name: `${currentGroup}`}, (err,data) => {
+          if(err)
+            console.log(err)
+          else
+            socket.emit('group messages load', data)
+        });
+
     })
     
     socket.on('chat message', (msg) => {
